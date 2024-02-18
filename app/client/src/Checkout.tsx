@@ -51,7 +51,7 @@ const Checkout: React.FC = () => {
     const stripe = await stripePromise
     try {
       const { data } = await axios.post(
-        'http://localhost:5000/api/checkout_session/',
+        'https://primeshoperserver.vercel.app/api/checkout_session/',
         {
           basket,
           products,

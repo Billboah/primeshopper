@@ -50,7 +50,11 @@ const Login: React.FC = () => {
         <h1 className="text-2xl font-bold mb-3">Sign in</h1>
 
         <button
-          className={` button  w-full mt-[10px]`}
+          className={`${
+            loading
+              ? 'button  w-full mt-[10px]'
+              : 'from-gray-300 to-gray-500 border-gray-200 text-gray-100 cursor-not-allowed active:from-gray-300 active:to-gray-500 focus:ring-0'
+          }`}
           disabled={loading}
           onClick={signIn}
         >

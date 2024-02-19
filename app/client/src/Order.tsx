@@ -124,7 +124,7 @@ const Order = () => {
                         <div className="flex ">
                           <div className="flex flex-col mr-2">
                             <h3 className="font-bold text-sm">ORDER PLACED</h3>
-                            <p>
+                            <p className="text-sm">
                               {formattedDateAndTime(item.timestamp.seconds)}
                             </p>
                           </div>
@@ -132,7 +132,9 @@ const Order = () => {
                             <h3 className="font-bold text-sm">
                               TOTAL COST OF ITEMS
                             </h3>
-                            <p>$ {item.amount.toFixed(2)}</p>
+                            <p className="text-sm">
+                              $ {item.amount.toFixed(2)}
+                            </p>
                           </div>
                         </div>
                         <div className="flex flex-col ml-2">

@@ -70,7 +70,7 @@ const Footer = () => {
 
         <div className="mt-8 text-center">
           <p className="text-gray-400">
-            &copy; {new Date().getFullYear()} Amazon Clone. All rights reserved.
+            &copy; {new Date().getFullYear()} PrimeShopper. All rights reserved.
           </p>
         </div>
       </div>

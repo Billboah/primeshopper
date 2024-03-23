@@ -33,7 +33,6 @@ app.get("/api/data", async (req, res) => {
 });
 
 app.post("/api/checkout_session", async (req, res) => {
-  res.send("This checkout session is working perfectly.");
   const { basket, products, userEmail } = req.body;
 
   const allProducts = {

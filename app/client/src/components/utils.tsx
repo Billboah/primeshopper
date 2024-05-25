@@ -1,4 +1,4 @@
-export const endPoint = 'http://localhost:5000'
+export const endPoint = 'https://primeshoperserver.vercel.app'
 
 export function Loading(loading: any) {
   return (

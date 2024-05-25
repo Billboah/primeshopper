@@ -27,12 +27,16 @@ export interface BasketState {
   items: Item[]
   input: string | number
   products: Product[]
+  category: string
+  productLoading: boolean
 }
 
 const initialState: BasketState = {
   items: [],
   input: '',
   products: [],
+  category: '',
+  productLoading: false,
 }
 
 export const basketSlice = createSlice({
@@ -42,16 +46,35 @@ export const basketSlice = createSlice({
     addProducts: (state, { payload }) => {
       state.products = payload
     },
+    setLoading: (state, { payload }) => {
+      state.productLoading = payload
+    },
     addToCart: (state, action) => {
       const newItem: Item = action.payload
       const existingItem = state.items.find((item) => item.id === newItem.id)
 
       if (existingItem) {
-        existingItem.count += 1
+        alert('This item is already in your cart')
       } else {
-        newItem.count = 1
-        state.items.push(newItem)
+        newItem.count
+          ? state.items.push(newItem)
+          : ((newItem.count = 1), state.items.push(newItem))
       }
+    },
+    changeCount: (state, action) => {
+      const newItem = action.payload
+      const existingItem = state.items.find((item) => item.id === newItem.id)
+      const change = newItem.change
+
+      if (existingItem) {
+        if (change === 'add') {
+          existingItem.count += 1
+        }
+        if (change === 'minus' && existingItem.count !== 1) {
+          existingItem.count -= 1
+        }
+      }
+      return state
     },
     addNumber: (state, action) => {
       const newItem = action.payload
@@ -84,8 +107,15 @@ export const basketSlice = createSlice({
   },
 })
 
-export const { addToCart, addNumber, removeFromCart, inputValue, addProducts } =
-  basketSlice.actions
+export const {
+  addToCart,
+  changeCount,
+  addNumber,
+  removeFromCart,
+  inputValue,
+  addProducts,
+  setLoading,
+} = basketSlice.actions
 
 export const selectItems = (state: { basket: { items: Item[] } }) =>
   state.basket.items
@@ -93,5 +123,7 @@ export const selectInput = (state: { basket: { input: string } }) =>
   state.basket.input
 export const selectProducts = (state: { basket: { products: Product[] } }) =>
   state.basket.products
+export const PLoading = (state: { basket: { productLoading: boolean } }) =>
+  state.basket.productLoading
 
 export default basketSlice.reducer

@@ -3,7 +3,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import ShoppingCart from '@mui/icons-material/ShoppingCart'
 import { auth } from '../firebase'
 import React, { useState } from 'react'
-import Logo from '../assets/amazonlogo.png'
+import Logo from '../assets/primeshopperWhite.png'
 import { useSelector, useDispatch } from 'react-redux'
 import { inputValue, selectItems } from '../redux/reducers/basket'
 import { RootState } from '../redux/reducers'
@@ -50,13 +50,9 @@ const Header: React.FC = () => {
       <div className="h-[80px] flex items-center justify-between">
         <Link
           to="/"
-          className="m-[20px] hover:border-solid hover:border-white hover:border-[1px]"
+          className="mx-[20px]  hover:border-solid hover:border-white hover:border-[1px]"
         >
-          <img
-            className="object-contain w-[100px] pt-[10px]"
-            src={Logo}
-            alt=""
-          />
+          <img className="object-contain w-[100px]" src={Logo} alt="" />
         </Link>
         <form
           onSubmit={searchInput}
@@ -72,20 +68,22 @@ const Header: React.FC = () => {
           </button>
         </form>
         <div className="flex justify-evenly items-center m-5">
-          <Link
-            to="#"
+          <button
             onClick={UserLink}
             className="text-white hover:border-solid hover:border-white hover:border-[1px] no-underline"
           >
             <div aria-hidden="true" className="flex flex-col mx-[10px] ">
-              <span className="text-[9px] md:text-[10px]">
+              <span
+                className="text-[9px] md:text-[10px]"
+                title={user ? 'Log Out' : 'Log In'}
+              >
                 {user ? `Hello,  ${user.displayName}` : 'Hello, Sign In'}
               </span>
               <span className="text-[11px] md:text-[13px] font-[800]">
                 Account & Lists
               </span>
             </div>
-          </Link>
+          </button>
           <Link
             to={'/orders'}
             className="text-white hover:border-solid hover:border-white hover:border-[1px] no-underline"

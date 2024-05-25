@@ -8,9 +8,14 @@ const Success = () => {
         Thank you for choosing amazon service.
       </p>
       <p>You will be informed when your item is shipped </p>
-      <Link to="/orders" className="button h-fit">
-        Go to your oders
-      </Link>
+      <div className="m-2 ">
+        <Link to="/orders" className="button w-[150px] mr-1">
+          Orders
+        </Link>
+        <Link to="/" className="button w-[150px] ml-1">
+          Home page
+        </Link>
+      </div>
     </div>
   )
 }

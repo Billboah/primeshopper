@@ -1,65 +1,146 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
+import Product from './components/Product'
+import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { PLoading, selectProducts } from './redux/reducers/basket'
 import Barner from './components/Barner'
-import { addProducts, selectProducts } from './redux/reducers/basket'
-import ProductFeed from './components/ProductFeed'
+import { Loading } from './components/utils'
 
-const Home: React.FC = () => {
-  const [loading, setLoading] = useState(false)
+interface Items {
+  id: number
+  title: string
+  image: string
+  description: string
+  category: string
+  price: number
+  rating: { rate: number }
+}
+
+const Home = () => {
   const products = useSelector(selectProducts)
-  const dispatch = useDispatch()
+  const productLoading = useSelector(PLoading)
+  const [randomData1, setRandomData1] = useState<any[]>([])
+  const [randomData2, setRandomData2] = useState<any[]>([])
 
   useEffect(() => {
-    if (products.length === 0) {
-      setLoading(true)
-      fetch('https://fakestoreapi.com/products')
-        .then((res) => res.json())
-        .then((data) => {
-          dispatch(addProducts(data))
-          setLoading(false)
-        })
-        .catch((error) => {
-          setLoading(false)
-          if (error.response) {
-            console.error('Server error:', error.response.data.error)
-          } else if (error.request) {
-            alert(
-              'Cannot reach the server. Please check your internet connection.'
-            )
-          } else {
-            console.error('Error:', error.message)
-          }
-        })
+    setRandomData1(shuffleArray(products))
+    setRandomData2(shuffleArray(products))
+  }, [productLoading])
+
+  const shuffleArray = (array: any[]) => {
+    const shuffledArray = [...array]
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[shuffledArray[i], shuffledArray[j]] = [
+        shuffledArray[j],
+        shuffledArray[i],
+      ]
     }
-    return
-  }, [])
+    return shuffledArray
+  }
 
   return (
-    <div className="flex-1 max-w-[1450px] min-w-[380px] ml-auto mr-auto">
-      <Barner />
-      <div className="">
-        {loading && (
-          <div role="status" className="absolute top-1/2 left-1/2 z-50">
-            <svg
-              aria-hidden="true"
-              className="h-[50px] w-[50px] md:w-[70px] md:h-[70px] mr-4 text-white animate-spin dark:text-white fill-blue-800"
-              viewBox="0 0 100 101"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                fill="currentColor"
-              />
-              <path
-                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                fill="currentFill"
-              />
-            </svg>
-            <span className="sr-only">Loading...</span>
+    <div className="flex-1 w-full flex justify-center items-center">
+      <div className="w-full h-full max-w-[1500px]">
+        <Barner />
+        {productLoading ? (
+          <Loading />
+        ) : (
+          <div className="bg-white w-full h-full ">
+            <div className="bg-white w-full h-full px-5 py-9">
+              <h2 className="text-xl font-bold">Our Top Category</h2>
+              <div className="flex flex-wrap items-center justify-around">
+                <Link
+                  to="/category/men's-clothing"
+                  className="flex flex-col justify-center items-center m-3 "
+                >
+                  <img
+                    src="https://png.pngtree.com/png-clipart/20190912/ourmid/pngtree-fashion-clothes-collection-for-men-graphic-png-image-png-image_1726895.jpg"
+                    alt="men's clothing collections"
+                    className="bg-white h-[170px] border-2 border-gray-200 hover:border-yellow-300"
+                  />
+                  <div className="font-bold text-gray-500">
+                    Men&rsquo;s Clothing
+                  </div>
+                </Link>
+                <Link
+                  to="/category/jewelery"
+                  className="flex flex-col justify-center items-center m-3 "
+                >
+                  <img
+                    src="https://collections.jewelryimages.net/png_images_v3/uniqueset04.png"
+                    alt="jewery collections"
+                    className="bg-white h-[170px] border-2 border-gray-200 hover:border-yellow-300"
+                  />
+                  <div className="font-bold text-gray-500"> Jewelery</div>
+                </Link>
+                <Link
+                  to="/category/electronics"
+                  className="flex flex-col justify-center items-center m-3 "
+                >
+                  <img
+                    src="https://png.pngtree.com/png-vector/20190120/ourmid/pngtree-isometric-electronic-devices-collection-png-image_324124.jpg"
+                    alt="electronics collections"
+                    className="bg-white h-[170px] border-2 border-gray-200 hover:border-yellow-300"
+                  />
+                  <div className="font-bold text-gray-500">Electronics</div>
+                </Link>
+                <Link
+                  to="/category/women's-clothing"
+                  className="flex flex-col justify-center items-center m-3 "
+                >
+                  <img
+                    src="https://makeitbritish.co.uk/wp-content/uploads/2021/04/Best-of-British-Womens-Clothing-Brands-Womenswear-made-in-the-UK.png"
+                    alt="women's clothing"
+                    className="bg-white h-[170px] border-2 border-gray-200 hover:border-yellow-300"
+                  />
+                  <div className="font-bold text-gray-500">
+                    Women&rsquo;s Clothing
+                  </div>
+                </Link>
+              </div>
+            </div>
+            <div className="h-full w-full px-5 pt-9 min-w-[380px]">
+              <div className="text-xl font-bold">Popular Products</div>
+              <div className="w-full flex overflow-x-auto scrollbar-hide">
+                {randomData1.map((item: Items) => (
+                  <Product
+                    key={item.id}
+                    id={item.id}
+                    title={item.title}
+                    image={item.image}
+                    category={item.category}
+                    price={item.price}
+                    rating={item.rating.rate}
+                    description={item.description}
+                  />
+                ))}
+              </div>
+            </div>
+            <img
+              src="https://m.media-amazon.com/images/I/71qid7QFWJL._SX3000_.jpg"
+              className={`md:col-span-full h-[200px] md:h-[300px] w-full`}
+              alt="advert banner"
+            />
+            <div className="h-full w-full px-5 py-9">
+              <div className="text-xl font-bold">New collections</div>
+              <div className="w-full flex overflow-x-scroll scrollbar-hide">
+                {randomData2.map((item: Items) => (
+                  <Product
+                    key={item.id}
+                    id={item.id}
+                    title={item.title}
+                    image={item.image}
+                    category={item.category}
+                    price={item.price}
+                    rating={item.rating.rate}
+                    description={item.description}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         )}
-        <ProductFeed products={products} />
       </div>
     </div>
   )

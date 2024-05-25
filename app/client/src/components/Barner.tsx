@@ -1,10 +1,10 @@
-import React from "react";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from "react-responsive-carousel";
+import React from 'react'
+import 'react-responsive-carousel/lib/styles/carousel.min.css' // requires a loader
+import { Carousel } from 'react-responsive-carousel'
 
 const Barner: React.FC = () => {
   return (
-    <div className="w-full z-0 md:mb-[-200px] lg:mb-[-250px] xl:mb-[-350px] gradient-mask-b-0">
+    <div className="w-full">
       <Carousel
         autoPlay
         infiniteLoop
@@ -16,34 +16,38 @@ const Barner: React.FC = () => {
         <div>
           <img
             loading="lazy"
-            src="https://images-eu.ssl-images-amazon.com/images/G/02/digital/video/merch2016/Hero/Covid19/Generic/GWBleedingHero_ENG_COVIDUPDATE__XSite_1500x600_PV_en-GB._CB428684220_.jpg"
-            alt=""
+            src="https://static.vecteezy.com/system/resources/thumbnails/002/294/859/small/flash-sale-web-banner-design-e-commerce-online-shopping-header-or-footer-banner-free-vector.jpg"
+            alt="banner 1"
+            className="h-[200px] md:h-[270px]"
           />
         </div>
         <div>
           <img
             loading="lazy"
-            src="https://m.media-amazon.com/images/I/71dbxIcDioL._SX3000_.jpg"
-            alt=""
+            src="https://previews.123rf.com/images/arrow/arrow1508/arrow150800011/43834601-online-shopping-e-commerce-flat-design-concept-banner-background.jpg"
+            alt="banner 2"
+            className="h-[200px] md:h-[270px]"
           />
         </div>
         <div>
           <img
             loading="lazy"
-            src="https://m.media-amazon.com/images/I/61DUO0NqyyL._SX3000_.jpg"
-            alt=""
+            src="https://4.bp.blogspot.com/-j08zU37hpt4/W5aaDndpsWI/AAAAAAAAFoc/tq-c11-V1sgMDyFd5cB3Z6jsO2UICZiQgCK4BGAYYCw/s1600/CL-Banner.jpg"
+            alt="banner 3"
+            className="h-[200px] md:h-[270px]"
           />
         </div>
         <div>
           <img
             loading="lazy"
-            src="https://m.media-amazon.com/images/I/71tIrZqybrL._SX3000_.jpg"
-            alt=""
+            src="https://www.jdmedia.co.za/images/carousel/Ecommerce-Banner-1920.jpg"
+            alt="banner 4"
+            className="h-[200px] md:h-[270px]"
           />
         </div>
       </Carousel>
     </div>
-  );
-};
+  )
+}
 
-export default Barner;
+export default Barner

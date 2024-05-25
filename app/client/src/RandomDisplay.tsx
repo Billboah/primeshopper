@@ -36,19 +36,22 @@ const RandomDisplay = () => {
   }
 
   return (
-    <div className="flex-1 flex flex-wrap items-center justify-center max-h-[380px] overflow-hidden my-[15px]">
-      {randomData.map((item: Items) => (
-        <RandomProduct
-          key={item.id}
-          id={item.id}
-          title={item.title}
-          image={item.image}
-          category={item.category}
-          price={item.price}
-          rating={item.rating.rate}
-          setLinkClicked={setLinkClicked}
-        />
-      ))}
+    <div className="flex flex-col justify-center items-center">
+      <div className="text-lg font-bold">Related Products</div>
+      <div className="flex-1 flex flex-wrap items-center justify-center max-h-[380px] overflow-hidden my-[15px]">
+        {randomData.map((item: Items) => (
+          <RandomProduct
+            key={item.id}
+            id={item.id}
+            title={item.title}
+            image={item.image}
+            category={item.category}
+            price={item.price}
+            rating={item.rating.rate}
+            setLinkClicked={setLinkClicked}
+          />
+        ))}
+      </div>
     </div>
   )
 }

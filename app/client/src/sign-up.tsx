@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import { auth, googleProvider } from './firebase'
 import Logo from './assets/primeshopperBlack.png'
-import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth'
+import {
+  signInWithPopup,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth'
 
 const Login: React.FC = () => {
   const history = useHistory()
@@ -10,12 +14,21 @@ const Login: React.FC = () => {
   const [passwordLoading, setPasswordLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
   const [error, setError] = useState('')
-  const [email, setEmial] = useState('')
-  const [password, setPassword] = useState('')
+  const [emailUp, setEmialUp] = useState('')
+  const [passwordUp, setPasswordUp] = useState('')
+  const [userName, setUserName] = useState('')
 
-  const singInWithPassword = () => {
+  const singUpWithPassword = async () => {
     setPasswordLoading(true)
-    signInWithEmailAndPassword(auth, email, password)
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      emailUp,
+      passwordUp
+    )
+
+    updateProfile(userCredential.user, {
+      displayName: userName,
+    })
       .then(() => {
         setPasswordLoading(false)
         const redirectPath = location.state?.from || '/'
@@ -27,7 +40,7 @@ const Login: React.FC = () => {
       })
   }
 
-  const signIn = () => {
+  const signInWithGoogle = () => {
     setGoogleLoading(true)
     signInWithPopup(auth, googleProvider)
       .then(() => {
@@ -58,26 +71,40 @@ const Login: React.FC = () => {
       </Link>
 
       <div className="w-[300px] h-fit p-[20px] mb-7 border-[1px] border-gray-300 flex flex-col items-center">
-        <h1 className="text-2xl font-bold mb-3">Sign in</h1>
-        <form className="w-full flex flex-col items-center mb-5">
+        <h1 className="text-2xl font-bold mb-3">Sign Up</h1>
+        <form className="w-full flex flex-col items-center mb-7">
           <div className="w-full h-full">
-            <label htmlFor="signInEmail">Email</label>
+            <label htmlFor="userName">Full Name</label>
             <input
-              id="signInEmail"
+              id="userName"
               type="email"
-              onChange={(e) => setEmial(e.target.value)}
+              onChange={(e) => setUserName(e.target.value)}
+              className="w-full px-2 py-1 outline-none border border-gray-300 rounded-sm "
+            />
+          </div>
+          <div className="w-full h-full">
+            <label htmlFor="signUpEmail">Email</label>
+            <input
+              id="signUpEmail"
+              type="email"
+              onChange={(e) => setEmialUp(e.target.value)}
               className="w-full px-2 py-1 outline-none border border-gray-300 rounded-sm "
             />
           </div>
           <div className="w-full h-full my-2">
-            <label htmlFor="signInPassword">Password</label>
+            <label htmlFor="signUpPassword">Password</label>
             <input
-              id="signInPassword"
+              id="signUpPassword"
               type="password"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setPasswordUp(e.target.value)}
               className="w-full px-2 py-1 border outline-none border-gray-300 rounded-sm"
             />
           </div>
+          <p className="mb-1 mt-2 text-xs font-medium">
+            By signing up you agree with PrimeShopper&apos;s Condition of Use
+            and Sales. Please see our Condition Notice, our Cookies Notice and
+            out Interest-Based Ads Notice
+          </p>
           <button
             className={`button w-full ${
               passwordLoading ||
@@ -85,9 +112,9 @@ const Login: React.FC = () => {
                 'from-gray-300 to-gray-500 text-white active:from-gray-300 active:to-gray-500 focus:ring-0')
             }`}
             disabled={passwordLoading || googleLoading}
-            onClick={singInWithPassword}
+            onClick={singUpWithPassword}
           >
-            {passwordLoading ? 'Loading...' : 'Sign in'}
+            {passwordLoading ? 'Loading...' : 'Sign Up'}
           </button>
         </form>
         <div className="w-full relative">
@@ -103,18 +130,18 @@ const Login: React.FC = () => {
               'from-gray-300 to-gray-500 text-white active:from-gray-300 active:to-gray-500 focus:ring-0')
           }`}
           disabled={passwordLoading || googleLoading}
-          onClick={signIn}
+          onClick={signInWithGoogle}
         >
           {googleLoading ? 'Loading...' : 'Sign in with Google'}
         </button>
         <p className="w-full mt-5 text-sm text-right">
-          <span>Don&rsquo;t have account?</span>
+          <span>Have account already?</span>
           <span>
             <button
-              onClick={() => history.push('/signup')}
+              onClick={() => history.push('/login')}
               className="text-blue-500 ml-1"
             >
-              Create an account
+              Sign In.
             </button>
           </span>
         </p>

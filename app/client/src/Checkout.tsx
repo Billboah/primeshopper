@@ -5,6 +5,7 @@ import { selectItems, selectProducts } from './redux/reducers/basket'
 import axios from 'axios'
 import { loadStripe } from '@stripe/stripe-js'
 import { RootState } from './redux/reducers'
+import { endPoint } from './components/utils'
 
 const stripePromise = loadStripe(
   'pk_test_51MKk0PCp6tjr9dpDc3ay0WlNnGO8JuYRiVqUDXFQ68TvH5NmVjqXw9FBTwahIJyliCDmbJaC5l2nYGyxZf9lbvpe00rEZ5p0nC'
@@ -50,14 +51,11 @@ const Checkout: React.FC = () => {
     const userEmail = user?.email
     const stripe = await stripePromise
     try {
-      const { data } = await axios.post(
-        'https://primeshoperserver.vercel.app/api/checkout_session/',
-        {
-          basket,
-          products,
-          userEmail,
-        }
-      )
+      const { data } = await axios.post(`${endPoint}/api/checkout_session/`, {
+        basket,
+        products,
+        userEmail,
+      })
       const result = await stripe?.redirectToCheckout({
         sessionId: data.sessionId,
       })
@@ -69,6 +67,7 @@ const Checkout: React.FC = () => {
         setLoading(false)
       } else if (error.request) {
         setLoading(false)
+        alert(error.message)
         alert('Cannot reach the server. Please check your internet connection.')
       } else {
         console.error('Error:', error.message)
@@ -78,7 +77,7 @@ const Checkout: React.FC = () => {
   }
 
   return (
-    <div className="flex-1 flex flex-col items-center lg:items-start lg:flex-row p-[20px] min-w-[380px]">
+    <div className="bg-gray-200 flex-1 flex flex-col items-center lg:items-start lg:flex-row p-[20px] min-w-[380px]">
       <div className="bg-white pr-[10px]">
         <img
           className="w-full mb-[10px]"
@@ -133,7 +132,6 @@ const Checkout: React.FC = () => {
               </small>
             </>
             <button
-              role="link"
               onClick={handleClick}
               disabled={!user || loading}
               className={`button mt-[10px] ${

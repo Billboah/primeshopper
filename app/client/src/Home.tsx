@@ -102,7 +102,7 @@ const Home = () => {
             </div>
             <div className="h-full w-full px-5 pt-9 min-w-[380px]">
               <div className="text-xl font-bold">Popular Products</div>
-              <div className="w-full flex overflow-x-auto scrollbar-hide">
+              <div className="w-full h-fit md:h-[1150px] flex overflow-x-auto md:flex-wrap md:overflow-hidden  scrollbar-hide">
                 {randomData1.map((item: Items) => (
                   <Product
                     key={item.id}
@@ -124,7 +124,7 @@ const Home = () => {
             />
             <div className="h-full w-full px-5 py-9">
               <div className="text-xl font-bold">New collections</div>
-              <div className="w-full flex overflow-x-scroll scrollbar-hide">
+              <div className="w-full h-fit md:h-[1150px] flex overflow-x-auto md:flex-wrap md:overflow-hidden  scrollbar-hide">
                 {randomData2.map((item: Items) => (
                   <Product
                     key={item.id}

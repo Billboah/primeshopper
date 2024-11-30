@@ -7,22 +7,13 @@ import { ShoppingCart } from '@mui/icons-material'
 
 interface Props {
   title: string
-  category: string
   id: number | string
   rating: number
   price: number
   image: string
-  description: string
 }
 
-const Product: React.FC<Props> = ({
-  title,
-  id,
-  rating,
-  image,
-  price,
-  description,
-}) => {
+const Product: React.FC<Props> = ({ title, id, rating, image, price }) => {
   const [hasPrime] = useState(Math.random() < 0.5)
   const dispatch = useDispatch()
   const [cart, setCart] = useState(false)
@@ -34,7 +25,6 @@ const Product: React.FC<Props> = ({
       image: image,
       price: price,
       rating: rating,
-      description: description,
       hasPrime: hasPrime,
     }
     dispatch(addToCart(productItem))
@@ -44,16 +34,16 @@ const Product: React.FC<Props> = ({
     <div
       onMouseEnter={() => setCart(true)}
       onMouseLeave={() => setCart(false)}
-      className={`w-[250px] relative m-2 min-w-[250px] bg-white z-30 rounded-md transform hover:bg-gray-50 hover:scale-105 transition`}
+      className={`w-[250px] relative m-2 min-w-[250px] bg-white rounded-md transform hover:bg-gray-50 hover:scale-105 hover:z-50 transition`}
     >
       <Link
         to={`/details/${id}`}
         onClick={() => window.scrollTo(0, 0)}
-        className="flex flex-col relative m-0 p-5 transform hover:bg-gray-50 active:scale-100 transition"
+        className="flex flex-col relative m-0 p-5 transform hover:bg-gray-50 hover:z-50s active:scale-100 transition"
       >
         <div className="flex flex-col justify-between h-full ">
           <div className="bg-white w-[200px] h-[200px] border border-gray-300 p-5 rounded-sm">
-            <img className="w-auto h-full " src={image} alt="" />
+            <img className="w-auto h-full " src={image} alt={title} />
           </div>
           <p className="my-3  line-clamp-1 font-bold">{title}</p>
           <p className="">
@@ -85,7 +75,7 @@ const Product: React.FC<Props> = ({
       </Link>
       {cart && (
         <button
-          className="bg-yellow-400 rounded-full ml-2 p-2 absolute top-[-10px] right-0 transform hover:scale-105 active:scale-100 transition z-20"
+          className="bg-yellow-400 rounded-full ml-2 p-2 absolute top-[-10px] right-0 transform hover:scale-105 hover:z-50 active:scale-100 transition z-20"
           title="Add Item to Cart"
           onClick={addItemToCart}
         >

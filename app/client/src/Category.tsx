@@ -1,7 +1,8 @@
-import { useSelector } from 'react-redux'
-import { selectProducts } from './redux/reducers/basket'
 import Product from './components/Product'
 import { useParams } from 'react-router-dom'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
+import { endPoint, Loading } from './components/utils'
 
 interface Items {
   id: number
@@ -10,19 +11,33 @@ interface Items {
   description: string
   category: string
   price: number
-  rating: { rate: number }
+  rate: number
 }
 
 const Category = (): JSX.Element => {
-  const products = useSelector(selectProducts)
   const { categoryName } = useParams<{ categoryName: string }>()
+  const [categoryProduct, setcategorryProduct] = useState([])
+  const [loading, setLoading] = useState(false)
+  const category = categoryName.replace(/-/g, ' ')
 
-  const formattedCategoryName = categoryName.replace(/-/g, ' ')
+  useEffect(() => {
+    const handleSearch = async () => {
+      setLoading(true)
 
-  const productCategory = products.filter(
-    (item: { title: string; category: string }) =>
-      item.category.toLowerCase() === formattedCategoryName.toLowerCase()
-  )
+      try {
+        const response = await axios.get(`${endPoint}/api/products/category`, {
+          params: { category },
+        })
+        setcategorryProduct(response.data)
+        setLoading(false)
+      } catch (err: any) {
+        setLoading(false)
+        console.log(err)
+      }
+    }
+
+    handleSearch()
+  }, [categoryName])
 
   const capitalize = (str: string) => {
     return str.toLowerCase().replace(/(?<=\s|^)\w/g, (c) => c.toUpperCase())
@@ -30,21 +45,23 @@ const Category = (): JSX.Element => {
 
   return (
     <div className="flex-1 px-5 py-9">
-      <h2 className="text-lg font-bold">{capitalize(formattedCategoryName)}</h2>
-      <div className="flex flex-wrap">
-        {productCategory.map((item: Items) => (
-          <Product
-            key={item.id}
-            id={item.id}
-            title={item.title}
-            image={item.image}
-            category={item.category}
-            price={item.price}
-            rating={item.rating.rate}
-            description={item.description}
-          />
-        ))}
-      </div>
+      <h2 className="text-lg font-bold">{capitalize(category)}</h2>
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="flex flex-wrap">
+          {categoryProduct.map((item: Items) => (
+            <Product
+              key={item.id}
+              id={item.id}
+              title={item.title}
+              image={item.image}
+              price={item.price}
+              rating={item.rate}
+            />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

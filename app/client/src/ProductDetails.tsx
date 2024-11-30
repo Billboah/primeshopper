@@ -1,12 +1,22 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { addToCart, selectProducts } from './redux/reducers/basket'
+import { addToCart } from './redux/reducers/basket'
 import StarIcon from '@mui/icons-material/Star'
 import { loadStripe } from '@stripe/stripe-js'
 import { RootState } from './redux/reducers'
 import axios from 'axios'
-import { endPoint } from './components/utils'
+import { endPoint, Loading } from './components/utils'
+
+interface Item {
+  id: number
+  title: string
+  image: string
+  description: string
+  category: string
+  price: number
+  rating: { rate: number; count: number }
+}
 
 const stripePromise = loadStripe(
   'pk_test_51MKk0PCp6tjr9dpDc3ay0WlNnGO8JuYRiVqUDXFQ68TvH5NmVjqXw9FBTwahIJyliCDmbJaC5l2nYGyxZf9lbvpe00rEZ5p0nC'
@@ -14,11 +24,11 @@ const stripePromise = loadStripe(
 
 const ProductDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>()
-  const products = useSelector(selectProducts)
-  const item = products.find((item) => item.id === parseInt(id))
+  const [item, setItem] = useState<null | Item>(null)
   const [hasPrime] = useState(Math.random() < 0.5)
   const dispatch = useDispatch()
-  const [loading, setLoading] = useState(false)
+  const [stripeLoading, setStripeLoading] = useState(false)
+  const [itemLoading, setItemLoading] = useState(false)
   const { user } = useSelector((state: RootState) => state.auth)
   const [numItem, setNumItem] = useState(1)
 
@@ -37,44 +47,66 @@ const ProductDetails: React.FC = () => {
     dispatch(addToCart(productItem))
   }
 
-  //buy now api
+  useEffect(() => {
+    const fetchProduct = async () => {
+      setItemLoading(true)
+      try {
+        const { data } = await axios.get(`${endPoint}/api/product/${id}`)
+        setItem(data)
+        setItemLoading(false)
+      } catch (err) {
+        setItemLoading(false)
+        console.log(err)
+      }
+    }
+
+    fetchProduct()
+  }, [id])
+
+  //buy product now api
   const handleClick = async () => {
     if (!user) {
       alert('Sign in before you can checkout')
     } else {
-      setLoading(true)
+      setStripeLoading(true)
       const userEmail = user?.email
       const stripe = await stripePromise
       try {
         const { data } = await axios.post(`${endPoint}/api/checkout_session/`, {
           basket: [productItem],
-          products,
           userEmail,
         })
         const result = await stripe?.redirectToCheckout({
           sessionId: data.sessionId,
         })
         if (result?.error) alert(result.error.message)
-        setLoading(false)
       } catch (error: any) {
+        setStripeLoading(false)
         if (error.response) {
           alert(error.response.data.error || error.message)
-          setLoading(false)
         } else if (error.request) {
-          setLoading(false)
           alert(
             'Cannot reach the server. Please check your internet connection.'
           )
         } else {
           alert(error.message)
-          setLoading(false)
         }
       }
     }
   }
 
   if (!item) {
-    return <div>Item not found</div>
+    return (
+      <div className="">
+        {itemLoading ? (
+          <div>
+            <Loading />
+          </div>
+        ) : (
+          <div>Item not found</div>
+        )}
+      </div>
+    )
   }
 
   return (
@@ -157,13 +189,13 @@ const ProductDetails: React.FC = () => {
           </button>
           <button
             onClick={handleClick}
-            disabled={loading}
+            disabled={stripeLoading}
             className={`button w-[150px] ml-[5px] ${
-              loading &&
+              stripeLoading &&
               'from-gray-300 to-gray-500 border-gray-200 text-gray-100 cursor-not-allowed active:from-gray-300 active:to-gray-500 focus:ring-0'
             }`}
           >
-            {loading ? 'Loading...' : 'Buy Now'}
+            {stripeLoading ? 'Loading...' : 'Buy Now'}
           </button>
         </div>
       </div>

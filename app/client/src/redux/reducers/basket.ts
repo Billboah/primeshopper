@@ -12,43 +12,22 @@ interface Item {
   hasPrime: any
 }
 
-interface Product {
-  title: string
-  category: string
-  description: string
-  id: number
-  rating: { rate: number }
-  price: number
-  image: string
-  count: number
-}
-
 export interface BasketState {
   items: Item[]
   input: string | number
-  products: Product[]
   category: string
-  productLoading: boolean
 }
 
 const initialState: BasketState = {
   items: [],
   input: '',
-  products: [],
   category: '',
-  productLoading: false,
 }
 
 export const basketSlice = createSlice({
   name: 'basket',
   initialState,
   reducers: {
-    addProducts: (state, { payload }) => {
-      state.products = payload
-    },
-    setLoading: (state, { payload }) => {
-      state.productLoading = payload
-    },
     addToCart: (state, action) => {
       const newItem: Item = action.payload
       const existingItem = state.items.find((item) => item.id === newItem.id)
@@ -107,23 +86,11 @@ export const basketSlice = createSlice({
   },
 })
 
-export const {
-  addToCart,
-  changeCount,
-  addNumber,
-  removeFromCart,
-  inputValue,
-  addProducts,
-  setLoading,
-} = basketSlice.actions
-
+export const { addToCart, changeCount, addNumber, removeFromCart, inputValue } =
+  basketSlice.actions
 export const selectItems = (state: { basket: { items: Item[] } }) =>
   state.basket.items
 export const selectInput = (state: { basket: { input: string } }) =>
   state.basket.input
-export const selectProducts = (state: { basket: { products: Product[] } }) =>
-  state.basket.products
-export const PLoading = (state: { basket: { productLoading: boolean } }) =>
-  state.basket.productLoading
 
 export default basketSlice.reducer

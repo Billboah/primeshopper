@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { selectProducts } from './redux/reducers/basket'
 import RandomProduct from './components/RandomProducts'
+import axios from 'axios'
+import { endPoint } from './components/utils'
 
 interface Items {
   id: number
@@ -10,18 +10,25 @@ interface Items {
   description: string
   category: string
   price: number
-  rating: { rate: number }
+  rate: number
 }
 const RandomDisplay = () => {
   const [randomData, setRandomData] = useState<any[]>([])
-  const products = useSelector(selectProducts)
+  const [products, setProduct] = useState([])
   const [linkClicked, setLinkClicked] = useState(false)
 
   useEffect(() => {
-    const shuffledData = shuffleArray(products)
-    setRandomData(shuffledData)
-    setLinkClicked(false)
-  }, [linkClicked === true || products])
+    const fetchProducts = async () => {
+      try {
+        const { data } = await axios.get(`${endPoint}/api/random_products`)
+        setProduct(data)
+      } catch (err) {
+        console.error('Error fetching products:', err)
+      }
+    }
+
+    fetchProducts()
+  }, [])
 
   const shuffleArray = (array: any[]) => {
     const shuffledArray = [...array]
@@ -35,6 +42,12 @@ const RandomDisplay = () => {
     return shuffledArray
   }
 
+  useEffect(() => {
+    const shuffledData = shuffleArray(products)
+    setRandomData(shuffledData)
+    setLinkClicked(false)
+  }, [linkClicked === true || products])
+
   return (
     <div className="flex flex-col justify-center items-center">
       <div className="text-lg font-bold">Related Products</div>
@@ -47,7 +60,7 @@ const RandomDisplay = () => {
             image={item.image}
             category={item.category}
             price={item.price}
-            rating={item.rating.rate}
+            rating={item.rate}
             setLinkClicked={setLinkClicked}
           />
         ))}

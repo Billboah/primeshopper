@@ -6,7 +6,7 @@ import Checkout from './Checkout'
 import Login from './Login'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from './firebase'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import SearchPage from './SearchPage'
 import ProductDetails from './ProductDetails'
 import Success from './Success'
@@ -16,15 +16,9 @@ import { setUser } from './redux/reducers/auth'
 import Order from './Order'
 import Category from './Category'
 import SignUp from './sign-up'
-import {
-  addProducts,
-  selectProducts,
-  setLoading,
-} from './redux/reducers/basket'
 
 const App: React.FC = () => {
   const dispatch = useDispatch()
-  const products = useSelector(selectProducts)
 
   useEffect(() => {
     return onAuthStateChanged(auth, (user) => {
@@ -42,34 +36,6 @@ const App: React.FC = () => {
       }
     })
   }, [auth])
-
-  useEffect(() => {
-    if (products.length === 0) {
-      dispatch(setLoading(true))
-      fetch('https://fakestoreapi.com/products')
-        .then((res) => res.json())
-        .then((data) => {
-          dispatch(addProducts(data))
-          dispatch(setLoading(false))
-        })
-        .catch((error) => {
-          dispatch(setLoading(false))
-          if (error.response) {
-            dispatch(setLoading(false))
-            alert(error.response.data.error)
-          } else if (error.request) {
-            alert(
-              'Cannot reach the server. Please check your internet connection.'
-            )
-            dispatch(setLoading(false))
-          } else {
-            alert(error.message)
-            dispatch(setLoading(false))
-          }
-        })
-    }
-    return
-  }, [])
 
   return (
     <Router>

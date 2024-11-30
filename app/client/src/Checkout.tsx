@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import CheckoutProduct from './components/CheckoutProduct'
-import { selectItems, selectProducts } from './redux/reducers/basket'
+import { selectItems } from './redux/reducers/basket'
 import axios from 'axios'
 import { loadStripe } from '@stripe/stripe-js'
 import { RootState } from './redux/reducers'
@@ -26,7 +26,6 @@ interface Item {
 const Checkout: React.FC = () => {
   const basket = useSelector(selectItems)
   const { user } = useSelector((state: RootState) => state.auth)
-  const products = useSelector(selectProducts)
   const [loading, setLoading] = useState(false)
 
   //calculating the total price
@@ -53,7 +52,6 @@ const Checkout: React.FC = () => {
     try {
       const { data } = await axios.post(`${endPoint}/api/checkout_session/`, {
         basket,
-        products,
         userEmail,
       })
       const result = await stripe?.redirectToCheckout({
@@ -62,16 +60,14 @@ const Checkout: React.FC = () => {
       if (result?.error) alert(result.error.message)
       setLoading(false)
     } catch (error: any) {
+      setLoading(false)
       if (error.response) {
         alert(error.response.data.error || error.message)
-        setLoading(false)
       } else if (error.request) {
-        setLoading(false)
         alert(error.message)
         alert('Cannot reach the server. Please check your internet connection.')
       } else {
         console.error('Error:', error.message)
-        setLoading(false)
       }
     }
   }

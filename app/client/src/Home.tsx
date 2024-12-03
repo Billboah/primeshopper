@@ -144,7 +144,7 @@ const Home = () => {
               <Loading />
             ) : (
               <div
-                className={`w-full h-fit max-h-[1150px] flex overflow-x-auto md:flex-wrap md:overflow-hidden  scrollbar-hide mt-5`}
+                className={`w-full h-fit max-h-[1130px] flex overflow-x-auto md:flex-wrap md:overflow-hidden  scrollbar-hide mt-5`}
               >
                 {popularProducts.map((item: Item) => (
                   <Product

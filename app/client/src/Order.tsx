@@ -1,17 +1,20 @@
 import { useState, useEffect } from 'react'
 import { collection, getDocs, orderBy, query } from 'firebase/firestore'
 import { db } from './firebase'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from './redux/reducers'
 import { format, isToday, isYesterday } from 'date-fns'
 import { Loading } from './components/utils'
+import { setError } from './redux/reducers/basket'
 
 const Order = () => {
   const [orders, setOrders] = useState<any>([])
   const [loading, setLoading] = useState(false)
+  const [orderError, setOrderError] = useState(false)
   const { user } = useSelector((state: RootState) => state.auth)
-  const [error, setError] = useState('')
+  const dispatch = useDispatch()
 
+  
   const getOrderData = async () => {
     setLoading(true)
     if (user) {
@@ -29,22 +32,15 @@ const Order = () => {
           dataArray.push(obj)
         })
         setOrders(dataArray)
-      } catch (error: any) {
-        setError(error.message)
-        console.log(error.message)
+      } catch (err: any) {
         setLoading(false)
-        if (error.response) {
-          setError(error.message)
-          setLoading(false)
-        } else if (error.request) {
-          setLoading(false)
-          alert(
-            'Cannot reach the server. Please check your internet connection.'
-          )
-          setError(error.message)
+        setOrderError(true)
+        if (err.response) {
+          dispatch(setError(err.response.data.message))
+        } else if (err.request) {
+          dispatch(setError('Network error, please try again later.'))
         } else {
-          setError(error.message)
-          setLoading(false)
+          dispatch(setError('An error occurred, please try again.'))
         }
       }
     }
@@ -84,7 +80,7 @@ const Order = () => {
           ) : (
             <di>
               {' '}
-              {orders.length === 0 && !loading && !error ? (
+              {orders.length === 0 && !loading && !orderError ? (
                 <div className="flex justify-center items-center">
                   <p>
                     You have not yet ordered for any item. To buy one or more

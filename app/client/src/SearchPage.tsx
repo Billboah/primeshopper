@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { selectInput } from './redux/reducers/basket'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectInput, setError } from './redux/reducers/basket'
 import Product from './components/Product'
 import axios from 'axios'
 import { endPoint, Loading } from './components/utils'
@@ -19,6 +19,7 @@ const SearchPage: React.FC = () => {
   const input = useSelector(selectInput)
   const [searchProduct, setsearchProduct] = useState([])
   const [loading, setLoading] = useState(false)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const handleSearch = async () => {
@@ -37,8 +38,13 @@ const SearchPage: React.FC = () => {
         setLoading(false)
       } catch (err: any) {
         setLoading(false)
-        console.log(err)
-      }
+if (err.response) {
+  dispatch(setError(err.response.data.message))
+} else if (err.request) {
+  dispatch(setError('Network error, please try again later.'))
+} else {
+  dispatch(setError('An error occurred, please try again.'))
+}      }
     }
 
     handleSearch()

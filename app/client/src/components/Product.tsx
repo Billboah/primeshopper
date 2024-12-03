@@ -34,7 +34,7 @@ const Product: React.FC<Props> = ({ title, id, rating, image, price }) => {
     <div
       onMouseEnter={() => setCart(true)}
       onMouseLeave={() => setCart(false)}
-      className={`w-[250px] relative m-2 min-w-[250px] bg-white rounded-md transform hover:bg-gray-50 hover:scale-105 hover:z-50 transition`}
+      className={`w-[250px] relative m-2 min-w-[250px] bg-white rounded-md transform hover:bg-gray-50 hover:scale-105 z-50 transition`}
     >
       <Link
         to={`/details/${id}`}

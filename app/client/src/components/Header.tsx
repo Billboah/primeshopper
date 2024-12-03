@@ -15,6 +15,17 @@ const Header: React.FC = () => {
   const dispatch = useDispatch()
   const history = useHistory()
 
+  const UserLink = () => {
+    if (user) {
+      auth.signOut()
+    } else {
+      history.push({
+        pathname: '/login',
+        state: { from: history.location.pathname },
+      })
+    }
+  }
+
   //calculating the number of items
   const getBasketNumber: number = basket.reduce(
     (total: number, basket: { count: number }) => {
@@ -34,17 +45,7 @@ const Header: React.FC = () => {
     }
   }
 
-  const UserLink = () => {
-    if (user) {
-      auth.signOut()
-    } else {
-      history.push({
-        pathname: '/login',
-        state: { from: history.location.pathname },
-      })
-    }
-  }
-
+  
   return (
     <nav className="bg-slate-800  flex flex-col sticky top-0 z-[100] min-w-[380px]">
       <div className="h-[80px] flex items-center justify-between">

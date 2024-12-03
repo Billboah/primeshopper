@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import CheckoutProduct from './components/CheckoutProduct'
-import { selectItems } from './redux/reducers/basket'
+import { selectItems, setError } from './redux/reducers/basket'
 import axios from 'axios'
 import { loadStripe } from '@stripe/stripe-js'
 import { RootState } from './redux/reducers'
@@ -27,6 +27,7 @@ const Checkout: React.FC = () => {
   const basket = useSelector(selectItems)
   const { user } = useSelector((state: RootState) => state.auth)
   const [loading, setLoading] = useState(false)
+  const dispatch = useDispatch()
 
   //calculating the total price
   const getBasketTotal: number = basket.reduce(
@@ -59,15 +60,14 @@ const Checkout: React.FC = () => {
       })
       if (result?.error) alert(result.error.message)
       setLoading(false)
-    } catch (error: any) {
+    } catch (err: any) {
       setLoading(false)
-      if (error.response) {
-        alert(error.response.data.error || error.message)
-      } else if (error.request) {
-        alert(error.message)
-        alert('Cannot reach the server. Please check your internet connection.')
+      if (err.response) {
+        dispatch(setError(err.response.data.message))
+      } else if (err.request) {
+        dispatch(setError('Network error, please try again later.'))
       } else {
-        console.error('Error:', error.message)
+        dispatch(setError('An error occurred, please try again.'))
       }
     }
   }

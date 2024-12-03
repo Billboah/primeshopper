@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { endPoint, Loading } from './components/utils'
+import { setError } from './redux/reducers/basket'
+import { useDispatch } from 'react-redux'
 
 interface Items {
   id: number
@@ -19,6 +21,7 @@ const Category = (): JSX.Element => {
   const [categoryProduct, setcategorryProduct] = useState([])
   const [loading, setLoading] = useState(false)
   const category = categoryName.replace(/-/g, ' ')
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const handleSearch = async () => {
@@ -32,7 +35,13 @@ const Category = (): JSX.Element => {
         setLoading(false)
       } catch (err: any) {
         setLoading(false)
-        console.log(err)
+        if (err.response) {
+          dispatch(setError(err.response.data.message))
+        } else if (err.request) {
+          dispatch(setError('Network error, please try again later.'))
+        } else {
+          dispatch(setError('An error occurred, please try again.'))
+        }
       }
     }
 
@@ -65,6 +74,5 @@ const Category = (): JSX.Element => {
     </div>
   )
 }
-// #endregion
 
 export default Category

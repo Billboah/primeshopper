@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { addToCart } from './redux/reducers/basket'
+import { addToCart, setError } from './redux/reducers/basket'
 import StarIcon from '@mui/icons-material/Star'
 import { loadStripe } from '@stripe/stripe-js'
 import { RootState } from './redux/reducers'
@@ -80,16 +80,14 @@ const ProductDetails: React.FC = () => {
           sessionId: data.sessionId,
         })
         if (result?.error) alert(result.error.message)
-      } catch (error: any) {
+      } catch (err: any) {
         setStripeLoading(false)
-        if (error.response) {
-          alert(error.response.data.error || error.message)
-        } else if (error.request) {
-          alert(
-            'Cannot reach the server. Please check your internet connection.'
-          )
+        if (err.response) {
+          dispatch(setError(err.response.data.message))
+        } else if (err.request) {
+          dispatch(setError('Network error, please try again later.'))
         } else {
-          alert(error.message)
+          dispatch(setError('An error occurred, please try again.'))
         }
       }
     }

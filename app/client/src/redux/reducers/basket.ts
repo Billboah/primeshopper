@@ -16,12 +16,14 @@ export interface BasketState {
   items: Item[]
   input: string | number
   category: string
+  error: string
 }
 
 const initialState: BasketState = {
   items: [],
   input: '',
   category: '',
+  error: '',
 }
 
 export const basketSlice = createSlice({
@@ -83,14 +85,25 @@ export const basketSlice = createSlice({
     inputValue: (state, action) => {
       state.input = action.payload
     },
+    setError: (state, action) => {
+      state.error = action.payload
+    },
   },
 })
 
-export const { addToCart, changeCount, addNumber, removeFromCart, inputValue } =
-  basketSlice.actions
+export const {
+  addToCart,
+  changeCount,
+  addNumber,
+  removeFromCart,
+  inputValue,
+  setError,
+} = basketSlice.actions
 export const selectItems = (state: { basket: { items: Item[] } }) =>
   state.basket.items
 export const selectInput = (state: { basket: { input: string } }) =>
   state.basket.input
+export const newError = (state: { basket: { error: string } }) =>
+  state.basket.error
 
 export default basketSlice.reducer

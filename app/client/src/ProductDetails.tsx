@@ -54,6 +54,7 @@ const ProductDetails: React.FC = () => {
         const { data } = await axios.get(`${endPoint}/api/product/${id}`)
         setItem(data)
         setItemLoading(false)
+        setNumItem(1)
       } catch (err) {
         setItemLoading(false)
         console.log(err)
@@ -113,6 +114,8 @@ const ProductDetails: React.FC = () => {
         className="w-auto max-w-[365px] h-[300px] border border-gray-300 p-5 rounded-sm"
         src={item.image}
         alt=""
+        height={300}
+        width={360}
       />
       <div className="md:ml-10 flex flex-col justify-between">
         <p className="my-2 font-bold">{item.title}</p>
@@ -139,6 +142,8 @@ const ProductDetails: React.FC = () => {
                 className="w-[30px]"
                 src="https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/052018/untitled-1_282.png?zBgfG0XEfdsPUq33GRuhu6udfY3Yu_rs&itok=39OQ7JCF"
                 alt=""
+                height={15}
+                width={30}
               />
               <p className="text-xs">Free delivery</p>
             </div>

@@ -58,8 +58,8 @@ const Checkout: React.FC = () => {
       const result = await stripe?.redirectToCheckout({
         sessionId: data.sessionId,
       })
-      if (result?.error) alert(result.error.message)
       setLoading(false)
+      if (result) return
     } catch (err: any) {
       setLoading(false)
       if (err.response) {

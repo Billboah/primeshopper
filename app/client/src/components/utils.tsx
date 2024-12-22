@@ -23,3 +23,36 @@ export function Loading() {
     </div>
   )
 }
+
+export const category = [
+  {
+    id: 1,
+    cat: "men's-clothing",
+    catName: "Men's clothings",
+    img: 'https://png.pngtree.com/png-clipart/20190912/ourmid/pngtree-fashion-clothes-collection-for-men-graphic-png-image-png-image_1726895.jpg',
+  },
+  {
+    id: 2,
+    cat: 'jewelery',
+    catName: 'Jewelery products',
+    img: 'https://collections.jewelryimages.net/png_images_v3/uniqueset04.png',
+  },
+  {
+    id: 3,
+    cat: 'electronics',
+    catName: 'Electronics products',
+    img: 'https://png.pngtree.com/png-vector/20190120/ourmid/pngtree-isometric-electronic-devices-collection-png-image_324124.jpg',
+  },
+  {
+    id: 4,
+    cat: "women's-clothing",
+    catName: "Women's clothings",
+    img: 'https://makeitbritish.co.uk/wp-content/uploads/2021/04/Best-of-British-Womens-Clothing-Brands-Womenswear-made-in-the-UK.png',
+  },
+  {
+    id: 5,
+    cat: '#',
+    catName: 'Other products',
+    img: 'https://www.societystores.in/wp-content/uploads/cart1.png',
+  },
+]

@@ -45,26 +45,37 @@ const Header: React.FC = () => {
     }
   }
 
-  
   return (
     <nav className="bg-slate-800  flex flex-col sticky top-0 z-[100] min-w-[380px]">
       <div className="h-[80px] flex items-center justify-between">
         <Link
           to="/"
           className="mx-[20px]  hover:border-solid hover:border-white hover:border-[1px]"
+          aria-label="Home"
         >
-          <img className="object-contain w-[100px]" src={Logo} alt="" />
+          <img
+            className="object-contain w-[100px]"
+            height={50}
+            width={100}
+            src={Logo}
+            alt=""
+          />
         </Link>
         <form
           onSubmit={searchInput}
           className="hidden bg-white md:flex items-center flex-1 rounded-md"
         >
+          <label htmlFor="search" className="sr-only">
+            Search:
+          </label>
           <input
             type="search"
+            name="search"
+            id="search"
             className="w-full h-[25px] m-[5px] p-[5px] outline-none border-none"
             onChange={(e) => setValue(e.target.value.toLowerCase())}
           />
-          <button>
+          <button aria-label="search">
             <SearchIcon className="bg-orange-400 m-0 p-1 !h-[35px] !w-[35px] rounded-[4px] cursor-pointer" />
           </button>
         </form>
@@ -72,6 +83,7 @@ const Header: React.FC = () => {
           <button
             onClick={UserLink}
             className="text-white hover:border-solid hover:border-white hover:border-[1px] no-underline"
+            aria-label="sign in"
           >
             <div aria-hidden="true" className="flex flex-col mx-[10px] ">
               <span

@@ -30,7 +30,13 @@ const RandomProduct: React.FC<Props> = ({
       className="w-[160px] h-[180px] text-[10px] flex flex-col m-1 p-[5px] bg-white z-30 border border-gray-300  rounded-sm transform hover:scale-105 active:scale-100 transition  "
     >
       <div className="flex flex-col justify-between h-full ">
-        <img className="w-[65px] h-[65px]" src={image} alt="" />
+        <img
+          className="w-[65px] h-[65px]"
+          src={image}
+          alt={title}
+          height={65}
+          width={65}
+        />
         <p className="my-3  line-clamp-2 font-bold">{title}</p>
         <p className="">
           <small>$</small>

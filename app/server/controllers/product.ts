@@ -19,7 +19,11 @@ export const random_products = async (
       rate: product.rating.rate,
     }));
 
-    res.status(200).json(data);
+    // Shuffle and select 10 random products
+    const shuffled = data.sort(() => 0.5 - Math.random());
+    const randomProducts = shuffled.slice(0, 10);
+
+    res.status(200).json(randomProducts);
   } catch (err) {
     next(err);
   }

@@ -34,16 +34,23 @@ const Product: React.FC<Props> = ({ title, id, rating, image, price }) => {
     <div
       onMouseEnter={() => setCart(true)}
       onMouseLeave={() => setCart(false)}
-      className={`w-[250px] relative m-2 min-w-[250px] bg-white rounded-md transform hover:bg-gray-50 hover:scale-105 z-50 transition`}
+      className={`w-[250px] relative m-2  bg-white rounded-md transform hover:bg-gray-50 hover:scale-105 transition`}
     >
       <Link
         to={`/details/${id}`}
         onClick={() => window.scrollTo(0, 0)}
-        className="flex flex-col relative m-0 p-5 transform hover:bg-gray-50 hover:z-50s active:scale-100 transition"
+        className="flex flex-col relative m-0 p-3 transform hover:bg-gray-50 hover:z-50s active:scale-100 transition"
       >
         <div className="flex flex-col justify-between h-full ">
-          <div className="bg-white w-[200px] h-[200px] border border-gray-300 p-5 rounded-sm">
-            <img className="w-auto h-full " src={image} alt={title} />
+          <div className="bg-white border border-gray-300 p-5 rounded-sm">
+            <img
+              className="w-auto h-[200px] "
+              src={image}
+              alt={title}
+              loading="lazy"
+              height={200}
+              width={200}
+            />
           </div>
           <p className="my-3  line-clamp-1 font-bold">{title}</p>
           <p className="">
@@ -67,8 +74,11 @@ const Product: React.FC<Props> = ({ title, id, rating, image, price }) => {
                 className="w-[30px]"
                 src="https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/052018/untitled-1_282.png?zBgfG0XEfdsPUq33GRuhu6udfY3Yu_rs&itok=39OQ7JCF"
                 alt=""
+                loading="lazy"
+                height={15}
+                width={30}
               />
-              <p className="text-xs">Free delivery</p>
+              <p className="text-xs w-[100px]">Free delivery</p>
             </div>
           )}
         </div>
